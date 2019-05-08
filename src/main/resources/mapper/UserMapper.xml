@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.chatRotbot.dao.mapper.UserMapper">
+    <sql id = "all_user_columns">
+         id,email,password,username,role,status,regTime,regIp
+    </sql>
+    <!--将通用的sql查询条件抽取出来,成为sql片段 ,给不同方法应用  -->
+    <sql id="query_user_sql_where">
+        <if test="userName!=null">
+            AND username LIKE '%${userName}%'
+        </if>
+        <if test="password!=null">
+            AND PASSWORD= #{password}
+        </if>
+    </sql>
+    <select id="getUserList" parameterType="user" resultType="user">
+        SELECT
+        <include refid="all_user_columns"></include>
+        FROM user
+        <where>
+            <include refid="query_user_sql_where"></include>
+        </where>
+    </select>
+</mapper>
